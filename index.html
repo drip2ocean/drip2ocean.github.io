@@ -1,10 +1,137 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>$Title$</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>drip2ocean</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      background: #0f172a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Segoe UI', sans-serif;
+      color: #f1f5f9;
+      overflow-x: hidden;
+    }
+
+    /* 标题 */
+    .title {
+      font-size: 32px;
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+      color: #38bdf8;
+    }
+
+    /* 画布：高斯分布图 */
+    #gaussianCanvas {
+      width: 800px;
+      max-width: 90vw;
+      height: 400px;
+      background: #1e293b;
+      border-radius: 12px;
+      box-shadow: 0 0 30px rgba(56, 189, 248, 0.15);
+    }
+
+    /* 说明文字 */
+    .desc {
+      margin-top: 20px;
+      font-size: 16px;
+      color: #94a3b8;
+      max-width: 700px;
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    .signature {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #64748b;
+    }
+  </style>
 </head>
 <body>
-$END$
+
+<div class="title">drip2ocean</div>
+<canvas id="gaussianCanvas"></canvas>
+<div class="desc">
+  滴水成海 · 积少成多<br>
+  每一次微小的积累，最终汇聚成壮阔的正态分布，正如知识与坚持的力量
+</div>
+<div class="signature">Author: 武承天</div>
+
+<script>
+  const canvas = document.getElementById('gaussianCanvas');
+  const ctx = canvas.getContext('2d');
+
+  // 画布尺寸
+  canvas.width = 800;
+  canvas.height = 400;
+  const w = canvas.width;
+  const h = canvas.height;
+
+  // 正态分布函数
+  function gaussian(x, mean, sigma) {
+    return Math.exp(-Math.pow((x - mean) / sigma, 2) / 2);
+  }
+
+  // 动画进度
+  let progress = 0;
+
+  function draw() {
+    // 清空画布
+    ctx.clearRect(0, 0, w, h);
+
+    // 坐标
+    const centerX = w / 2;
+    const baseY = h * 0.8;
+    const sigma = 180;
+
+    // 绘制坐标轴
+    ctx.strokeStyle = '#475569';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(50, baseY);
+    ctx.lineTo(w - 50, baseY);
+    ctx.stroke();
+
+    // 绘制高斯曲线（动态）
+    ctx.strokeStyle = '#38bdf8';
+    ctx.lineWidth = 3;
+    ctx.shadowColor = '#38bdf8';
+    ctx.shadowBlur = 15;
+    ctx.beginPath();
+
+    let step = 4;
+    for (let x = -progress; x <= progress; x += step) {
+      let px = centerX + x;
+      let py = baseY - h * 0.6 * gaussian(x, 0, sigma);
+      if (x === -progress) {
+        ctx.moveTo(px, py);
+      } else {
+        ctx.lineTo(px, py);
+      }
+    }
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+
+    // 缓慢展开动画
+    if (progress < 350) {
+      progress += 2;
+    }
+
+    requestAnimationFrame(draw);
+  }
+
+  draw();
+</script>
 </body>
 </html>
