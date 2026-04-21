@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>drip2ocean</title>
+  <title>drip2ocean | 滴水成海</title>
   <style>
     * {
       margin: 0;
@@ -11,127 +11,428 @@
       box-sizing: border-box;
     }
 
+    :root {
+      --bg-primary: #f8fafc;
+      --bg-secondary: #f1f5f9;
+      --bg-card: #ffffff;
+      --bg-card-hover: #f8fafc;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+      --accent-cyan: #0891b2;
+      --accent-blue: #0284c7;
+      --accent-purple: #7c3aed;
+      --accent-pink: #db2777;
+      --accent-green: #059669;
+      --accent-orange: #ea580c;
+      --border-color: #e2e8f0;
+    }
+
     body {
       min-height: 100vh;
-      background: #0f172a;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Segoe UI', sans-serif;
-      color: #f1f5f9;
+      background: var(--bg-primary);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: var(--text-primary);
       overflow-x: hidden;
     }
 
-    /* 标题 */
-    .title {
-      font-size: 32px;
-      letter-spacing: 2px;
-      margin-bottom: 20px;
-      color: #38bdf8;
+    /* 背景装饰 */
+    .bg-decoration {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
     }
 
-    /* 画布：高斯分布图 */
-    #gaussianCanvas {
-      width: 800px;
-      max-width: 90vw;
-      height: 400px;
-      background: #1e293b;
-      border-radius: 12px;
-      box-shadow: 0 0 30px rgba(56, 189, 248, 0.15);
+    .bg-gradient {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.15;
     }
 
-    /* 说明文字 */
-    .desc {
-      margin-top: 20px;
-      font-size: 16px;
-      color: #94a3b8;
-      max-width: 700px;
+    .bg-gradient-1 {
+      top: -200px;
+      right: -100px;
+      background: var(--accent-cyan);
+    }
+
+    .bg-gradient-2 {
+      bottom: -200px;
+      left: -100px;
+      background: var(--accent-purple);
+    }
+
+    /* 容器 */
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 60px 24px;
+    }
+
+    /* 头部区域 */
+    .header {
       text-align: center;
+      margin-bottom: 80px;
+    }
+
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .logo-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 0 30px rgba(34, 211, 238, 0.3);
+    }
+
+    .logo-text {
+      font-size: 36px;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: 2px;
+    }
+
+    .tagline {
+      font-size: 18px;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto;
       line-height: 1.6;
     }
 
-    .signature {
-      margin-top: 10px;
+    .tagline-highlight {
+      color: var(--accent-cyan);
+      font-weight: 500;
+    }
+
+    /* 领域网格 */
+    .domains-section {
+      margin-bottom: 80px;
+    }
+
+    .section-title {
       font-size: 14px;
-      color: #64748b;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--border-color), transparent);
+    }
+
+    .domains-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    /* 领域卡片 */
+    .domain-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 28px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .domain-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: var(--card-accent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+
+    .domain-card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--card-accent);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .domain-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .domain-icon {
+      width: 52px;
+      height: 52px;
+      background: linear-gradient(135deg, var(--card-accent), transparent);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    .domain-name {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text-primary);
+    }
+
+    .domain-desc {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .domain-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .domain-meta span {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* 统计区域 */
+    .stats-section {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 80px;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 36px;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    /* 页脚 */
+    .footer {
+      text-align: center;
+      padding-top: 40px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .footer-text {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .footer-author {
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    /* 动画 */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .domain-card {
+      animation: fadeInUp 0.5s ease forwards;
+      opacity: 0;
+    }
+
+    .domain-card:nth-child(1) { animation-delay: 0.1s; }
+    .domain-card:nth-child(2) { animation-delay: 0.15s; }
+    .domain-card:nth-child(3) { animation-delay: 0.2s; }
+    .domain-card:nth-child(4) { animation-delay: 0.25s; }
+    .domain-card:nth-child(5) { animation-delay: 0.3s; }
+    .domain-card:nth-child(6) { animation-delay: 0.35s; }
+
+    /* 响应式 */
+    @media (max-width: 768px) {
+      .container {
+        padding: 40px 16px;
+      }
+
+      .logo-text {
+        font-size: 28px;
+      }
+
+      .tagline {
+        font-size: 16px;
+      }
+
+      .domains-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stat-value {
+        font-size: 28px;
+      }
     }
   </style>
 </head>
 <body>
+  <!-- 背景装饰 -->
+  <div class="bg-decoration">
+    <div class="bg-gradient bg-gradient-1"></div>
+    <div class="bg-gradient bg-gradient-2"></div>
+  </div>
 
-<div class="title">drip2ocean</div>
-<canvas id="gaussianCanvas"></canvas>
-<div class="desc">
-  滴水成海 · 积少成多<br>
-  每一次微小的积累，最终汇聚成壮阔的正态分布，正如知识与坚持的力量
-</div>
-<div class="signature">Author: 武承天</div>
+  <div class="container">
+    <!-- 头部 -->
+    <header class="header">
+      <div class="logo">
+        <div class="logo-icon">💧</div>
+        <span class="logo-text">drip2ocean</span>
+      </div>
+      <p class="tagline">
+        <span class="tagline-highlight">滴水成海</span> · 积少成多<br>
+        每一次微小的积累，最终汇聚成壮阔的力量
+      </p>
+    </header>
 
-<script>
-  const canvas = document.getElementById('gaussianCanvas');
-  const ctx = canvas.getContext('2d');
+    <!-- 领域展示 -->
+    <section class="domains-section">
+      <h2 class="section-title">探索领域</h2>
+      <div class="domains-grid" id="domainsGrid">
+        <!-- 领域卡片将通过 JS 动态渲染 -->
+      </div>
+    </section>
 
-  // 画布尺寸
-  canvas.width = 800;
-  canvas.height = 400;
-  const w = canvas.width;
-  const h = canvas.height;
+    <!-- 统计 -->
+    <section class="stats-section" id="statsSection">
+      <!-- 统计将通过 JS 动态渲染 -->
+    </section>
 
-  // 正态分布函数
-  function gaussian(x, mean, sigma) {
-    return Math.exp(-Math.pow((x - mean) / sigma, 2) / 2);
-  }
+    <!-- 页脚 -->
+    <footer class="footer">
+      <p class="footer-text">
+        <span class="footer-author">Author: 武承天</span> · 每一次积累都是进步
+      </p>
+    </footer>
+  </div>
 
-  // 动画进度
-  let progress = 0;
+  <script>
+    // ========== 领域配置 - 在此添加新领域 ==========
+    const domains = [
+      {
+        id: 'mlm',
+        name: '机器学习方法',
+        desc: 'Machine Learning Methods - 记录学习历程，探索算法原理',
+        icon: '🧠',
+        link: 'mlm/',
+        accent: '#22d3ee',
+        articles: 12,
+        updated: '2024-04'
+      },
+      // 在此处添加新领域...
+      // {
+      //   id: 'your-domain',
+      //   name: '领域名称',
+      //   desc: '领域描述',
+      //   icon: '🎯',
+      //   link: 'your-domain/',
+      //   accent: '#34d399',
+      //   articles: 0,
+      //   updated: '2024-04'
+      // }
+    ];
 
-  function draw() {
-    // 清空画布
-    ctx.clearRect(0, 0, w, h);
+    // ========== 渲染领域卡片 ==========
+    function renderDomains() {
+      const grid = document.getElementById('domainsGrid');
 
-    // 坐标
-    const centerX = w / 2;
-    const baseY = h * 0.8;
-    const sigma = 180;
-
-    // 绘制坐标轴
-    ctx.strokeStyle = '#475569';
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(50, baseY);
-    ctx.lineTo(w - 50, baseY);
-    ctx.stroke();
-
-    // 绘制高斯曲线（动态）
-    ctx.strokeStyle = '#38bdf8';
-    ctx.lineWidth = 3;
-    ctx.shadowColor = '#38bdf8';
-    ctx.shadowBlur = 15;
-    ctx.beginPath();
-
-    let step = 4;
-    for (let x = -progress; x <= progress; x += step) {
-      let px = centerX + x;
-      let py = baseY - h * 0.6 * gaussian(x, 0, sigma);
-      if (x === -progress) {
-        ctx.moveTo(px, py);
-      } else {
-        ctx.lineTo(px, py);
-      }
+      grid.innerHTML = domains.map(domain => `
+        <a href="${domain.link}" class="domain-card" style="--card-accent: ${domain.accent}">
+          <div class="domain-icon">${domain.icon}</div>
+          <h3 class="domain-name">${domain.name}</h3>
+          <p class="domain-desc">${domain.desc}</p>
+          <div class="domain-meta">
+            <span>📄 ${domain.articles} 篇</span>
+            <span>🕐 ${domain.updated}</span>
+          </div>
+        </a>
+      `).join('');
     }
-    ctx.stroke();
-    ctx.shadowBlur = 0;
 
-    // 缓慢展开动画
-    if (progress < 350) {
-      progress += 2;
+    // ========== 渲染统计 ==========
+    function renderStats() {
+      const section = document.getElementById('statsSection');
+      const totalArticles = domains.reduce((sum, d) => sum + (d.articles || 0), 0);
+
+      const stats = [
+        { value: domains.length, label: '探索领域', icon: '🎯' },
+        { value: totalArticles, label: '文章总数', icon: '📄' },
+        { value: '∞', label: '可能性', icon: '✨' }
+      ];
+
+      section.innerHTML = stats.map(stat => `
+        <div class="stat-card">
+          <div class="stat-value">${stat.value}</div>
+          <div class="stat-label">${stat.icon} ${stat.label}</div>
+        </div>
+      `).join('');
     }
 
-    requestAnimationFrame(draw);
-  }
-
-  draw();
-</script>
+    // ========== 初始化 ==========
+    renderDomains();
+    renderStats();
+  </script>
 </body>
 </html>

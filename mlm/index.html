@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LaTeX 示例 - mlm</title>
+
+  <!-- KaTeX CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      background: #0f172a;
+      font-family: 'Segoe UI', sans-serif;
+      color: #f1f5f9;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      color: #38bdf8;
+      margin-bottom: 30px;
+      font-size: 28px;
+    }
+
+    h2 {
+      color: #94a3b8;
+      margin: 30px 0 15px;
+      font-size: 18px;
+      border-bottom: 1px solid #334155;
+      padding-bottom: 10px;
+    }
+
+    .formula-box {
+      background: #1e293b;
+      padding: 20px;
+      border-radius: 12px;
+      margin: 20px 0;
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.1);
+    }
+
+    .formula-label {
+      color: #64748b;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .formula {
+      font-size: 18px;
+      overflow-x: auto;
+    }
+
+    code {
+      background: #334155;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 14px;
+      color: #f1f5f9;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 40px;
+      color: #38bdf8;
+      text-decoration: none;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>LaTeX 数学公式示例</h1>
+
+    <h2>行内公式</h2>
+    <div class="formula-box">
+      <div class="formula-label">这是行内公式：E = mc<sup>2</sup></div>
+      <div class="formula">
+        爱因斯坦质能方程 $E = mc^2$ 是物理学中最著名的公式之一。
+      </div>
+    </div>
+
+    <h2>行间公式</h2>
+    <div class="formula-box">
+      <div class="formula-label">二次方程求根公式：</div>
+      <div class="formula">
+        $$x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$$
+      </div>
+    </div>
+
+    <div class="formula-box">
+      <div class="formula-label">正态分布概率密度函数：</div>
+      <div class="formula">
+        $$f(x) = \frac{1}{\sigma\sqrt{2\pi}} e^{-\frac{(x-\mu)^2}{2\sigma^2}}$$
+      </div>
+    </div>
+
+    <div class="formula-box">
+      <div class="formula-label">矩阵运算：</div>
+      <div class="formula">
+        $$\begin{pmatrix} a & b \\ c & d \end{pmatrix}^{-1} = \frac{1}{ad-bc} \begin{pmatrix} d & -b \\ -c & a \end{pmatrix}$$
+      </div>
+    </div>
+
+    <div class="formula-box">
+      <div class="formula-label">极限与积分：</div>
+      <div class="formula">
+        $$\lim_{n \to \infty} \sum_{i=1}^{n} f(x_i)\Delta x = \int_a^b f(x)\,dx$$
+      </div>
+    </div>
+
+    <h2>使用说明</h2>
+    <div class="formula-box">
+      <p>本项目使用 <strong>KaTeX</strong> 渲染 LaTeX 公式。</p>
+      <ul style="margin-top: 15px; margin-left: 20px; line-height: 2;">
+        <li>行内公式：使用 <code>$...$</code> 包裹</li>
+        <li>行间公式：使用 <code>$$...$$</code> 包裹</li>
+      </ul>
+    </div>
+
+    <a href="../index.html" class="back-link">← 返回首页</a>
+  </div>
+
+  <!-- KaTeX JS -->
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: '$$', right: '$$', display: true},
+          {left: '$', right: '$', display: false}
+        ],
+        throwOnError: false
+      });
+    });
+  </script>
+</body>
+</html>
